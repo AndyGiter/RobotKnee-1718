@@ -1,3 +1,31 @@
+/* Copyright (c) 2017 FIRST. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted (subject to the limitations in the disclaimer below) provided that
+ * the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, this list
+ * of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice, this
+ * list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution.
+ *
+ * Neither the name of FIRST nor the names of its contributors may be used to endorse or
+ * promote products derived from this software without specific prior written permission.
+ *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
+ * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -35,9 +63,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  *
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
+ *
+ * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
+ * is explained in {@link ConceptVuforiaNavigation}.
  */
 
-@Autonomous(name="Concept: VuMark Id", group ="Concept")
+@Autonomous(name="5452 Autonomous", group ="Concept")
 
 public class Vuforic extends LinearOpMode {
     
@@ -67,6 +98,18 @@ public class Vuforic extends LinearOpMode {
         // OR...  Do Not Activate the Camera Monitor View, to save power
         // VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
+        /*
+         * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
+         * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
+         * A Vuforia 'Development' license key, can be obtained free of charge from the Vuforia developer
+         * web site at https://developer.vuforia.com/license-manager.
+         *
+         * Vuforia license keys are always 380 characters long, and look as if they contain mostly
+         * random data. As an example, here is a example of a fragment of a valid key:
+         *      ... yIgIzTqZ4mWjk9wd3cZO9T1axEqzuhxoGlfOOI2dRzKS4T0hQ8kT ...
+         * Once you've obtained a license key, copy the string from the Vuforia web site
+         * and paste it in to your code onthe next line, between the double quotes.
+         */
         parameters.vuforiaLicenseKey = "AbbrEYP/////AAAAGSRsYKryFkbHuNDCptghQKJrrNi81nioA0lFQYXey4+56/mLgwkoqS40qchgWM0lzce9hgyYZjIiNWJ+EUcQnaeZyKUtxNnl8Cw4HgHnhjyHrXmCGG/sLYGQsTo8HYshF9fgBizSsPgVP20BmfvYg6YdBby8rc3iKsd1qYZzX/Mso30iMR7kL9GjgBeeI9bD04hhD/7aw6cxgBV2HrwLn3yedxCERQOH8InA6QKr9juTBRJ9cdmRpEQexA6jg3NRYYOz6vWQke9XJL/4RV6z6uyKGA+JHlatfupo46fxd/N11ZMIJGnyDAogJaIzr5F8mxFnxOuhSamZ9CGpapTThzWbVRTlY7RuEGMcCqmQlfBx";
 
         /*
@@ -90,21 +133,21 @@ public class Vuforic extends LinearOpMode {
         telemetry.addData(">", "Press Play to start");
         telemetry.update();
         
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
+        leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
         
+        relicTrackables.activate();
+        
+        double leftPower = 0;
+        double rightPower = 0;     
+        
         waitForStart();
         runtime.reset();
 
-        relicTrackables.activate();
-
         while (opModeIsActive()) {
-            
-            double leftPower = 0;
-            double rightPower = 0;
 
             /**
              * See if any of the instances of {@link relicTemplate} are currently visible.
@@ -120,22 +163,22 @@ public class Vuforic extends LinearOpMode {
                  * on which VuMark was visible. */
                 telemetry.addData("VuMark", "%s visible", vuMark);
                 
-                if (vuMark == RelicRecoveryVuMark.LEFT) {
+                if (vuMark.equals(RelicRecoveryVuMark.LEFT)) {
                     leftPower  = -1;
                     rightPower = 1;
                 }
-                if (vuMark == RelicRecoveryVuMark.CENTER) {
+                else if (vuMark.equals(RelicRecoveryVuMark.CENTER)) {
                     leftPower  = 1;
                     rightPower = 1;
                 }
-                if (vuMark == RelicRecoveryVuMark.LEFT) {
+                else if (vuMark.equals(RelicRecoveryVuMark.LEFT)) {
                     leftPower  = 1;
                     rightPower = -1;
                 }
 
             }
             else {
-                telemetry.addData("VuMark", "yayaya");
+                telemetry.addData("VuMark", "Nothing Visible");
             }
 
             leftDrive.setPower(leftPower);
@@ -146,7 +189,7 @@ public class Vuforic extends LinearOpMode {
             telemetry.update();
         }
     }
- 
+
     String format(OpenGLMatrix transformationMatrix) {
         return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
     }
