@@ -1,31 +1,3 @@
-/* Copyright (c) 2017 FIRST. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided that
- * the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list
- * of conditions and the following disclaimer.
- *
- * Redistributions in binary form must reproduce the above copyright notice, this
- * list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution.
- *
- * Neither the name of FIRST nor the names of its contributors may be used to endorse or
- * promote products derived from this software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
- * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -75,6 +47,9 @@ public class Vuforic extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
+    private DcMotor grabLeft1 = null;
+    private DcMotor grabLeft2 = null;
+    private DcMotor grabRight1 = null;
 
     public static final String TAG = "Vuforia VuMark Sample";
 
@@ -133,22 +108,35 @@ public class Vuforic extends LinearOpMode {
         telemetry.addData(">", "Press Play to start");
         telemetry.update();
         
-        leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        leftDrive = hardwareMap.get(DcMotor.class, "LeftMotor");
+        rightDrive = hardwareMap.get(DcMotor.class, "RightMotor");
+        grabLeft1 = hardwareMap.get(DcMotor.class, "GrabLeftMotor1");
+        grabLeft2 = hardwareMap.get(DcMotor.class, "GrabLeftMotor2");
+        grabRight1 = hardwareMap.get(DcMotor.class, "GrabRightMotor1");
         
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        GrabRight1.setDirection(DcMotor.Direction.FORWARD);
+        GrabLeft1.setDirection(DcMotor.Direction.FORWARD);
+        GrabLeft2.setDirection(DcMotor.Direction.REVERSE);
         
         relicTrackables.activate();
-        
-        double leftPower = 0;
-        double rightPower = 0;     
         
         waitForStart();
         runtime.reset();
 
         while (opModeIsActive()) {
-
+            
+            leftDrive.setPower(1);
+            rightDrive.setPower(1); 
+            ElapsedTime eTime = new ElapsedTime();
+            eTime.reset();
+            while(eTime.time() < 0.4) {}
+            leftDrive.setPower(0);
+            rightDrive.setPower(0);
+            eTime.reset();
+            while(eTime.time() < 1.5) {}
+            
             /**
              * See if any of the instances of {@link relicTemplate} are currently visible.
              * {@link RelicRecoveryVuMark} is an enum which can have the following values:
@@ -164,29 +152,115 @@ public class Vuforic extends LinearOpMode {
                 telemetry.addData("VuMark", "%s visible", vuMark);
                 
                 if (vuMark.equals(RelicRecoveryVuMark.LEFT)) {
-                    leftPower  = -1;
-                    rightPower = 1;
+                    leftDrive.setPower(1);
+                    rightDrive.setPower(-1);
+                    eTime.reset();
+                    while(eTime.time() < 0.5) {}
+                    leftDrive.setPower(0);
+                    rightDrive.setPower(0);
+                    eTime.reset();
+                    while(eTime.time() < 0.3) {}
+                    leftDrive.setPower(1);
+                    rightDrive.setPower(1);
+                    eTime.reset();
+                    while(eTime.time() < 3.0) {}
+                    leftDrive.setPower(0);
+                    rightDrive.setPower(0);
+                    eTime.reset();
+                    while(eTime.time() < 0.3) {}
+                    leftDrive.setPower(-1);
+                    rightDrive.setPower(1);
+                    eTime.reset();
+                    while(eTime.time() < 0.5) {}
+                    leftDrive.setPower(0);
+                    rightDrive.setPower(0);
+                    eTime.reset();
+                    while(eTime.time() < 0.3) {}
+                    leftDrive.setPower(1);
+                    rightDrive.setPower(1);
+                    eTime.reset();
+                    while(eTime.time() < 1.0) {}
+                    leftDrive.setPower(0);
+                    rightDrive.setPower(0);
+                    GrabRight1.setPower(1);
+                    GrabLeft2.setPower(1);
+                    GrabLeft1.setPower(1);
                 }
                 else if (vuMark.equals(RelicRecoveryVuMark.CENTER)) {
-                    leftPower  = 1;
-                    rightPower = 1;
+                    leftDrive.setPower(1);
+                    rightDrive.setPower(-1);
+                    eTime.reset();
+                    while(eTime.time() < 0.5) {}
+                    leftDrive.setPower(0);
+                    rightDrive.setPower(0);
+                    eTime.reset();
+                    while(eTime.time() < 0.3) {}
+                    leftDrive.setPower(1);
+                    rightDrive.setPower(1);
+                    eTime.reset();
+                    while(eTime.time() < 3.5) {}
+                    leftDrive.setPower(0);
+                    rightDrive.setPower(0);
+                    eTime.reset();
+                    while(eTime.time() < 0.3) {}
+                    leftDrive.setPower(-1);
+                    rightDrive.setPower(1);
+                    eTime.reset();
+                    while(eTime.time() < 0.5) {}
+                    leftDrive.setPower(0);
+                    rightDrive.setPower(0);
+                    eTime.reset();
+                    while(eTime.time() < 0.3) {}
+                    leftDrive.setPower(1);
+                    rightDrive.setPower(1);
+                    eTime.reset();
+                    while(eTime.time() < 1.0) {}
+                    leftDrive.setPower(0);
+                    rightDrive.setPower(0);
+                    GrabRight1.setPower(1);
+                    GrabLeft2.setPower(1);
+                    GrabLeft1.setPower(1);
                 }
-                else if (vuMark.equals(RelicRecoveryVuMark.LEFT)) {
-                    leftPower  = 1;
-                    rightPower = -1;
+                else if (vuMark.equals(RelicRecoveryVuMark.RIGHT)) {
+                    leftDrive.setPower(1);
+                    rightDrive.setPower(-1);
+                    eTime.reset();
+                    while(eTime.time() < 0.5) {}
+                    leftDrive.setPower(0);
+                    rightDrive.setPower(0);
+                    eTime.reset();
+                    while(eTime.time() < 0.3) {}
+                    leftDrive.setPower(1);
+                    rightDrive.setPower(1);
+                    eTime.reset();
+                    while(eTime.time() < 4.0) {}
+                    leftDrive.setPower(0);
+                    rightDrive.setPower(0);
+                    eTime.reset();
+                    while(eTime.time() < 0.3) {}
+                    leftDrive.setPower(-1);
+                    rightDrive.setPower(1);
+                    eTime.reset();
+                    while(eTime.time() < 0.5) {}
+                    leftDrive.setPower(0);
+                    rightDrive.setPower(0);
+                    eTime.reset();
+                    while(eTime.time() < 0.3) {}
+                    leftDrive.setPower(1);
+                    rightDrive.setPower(1);
+                    eTime.reset();
+                    while(eTime.time() < 1.0) {}
+                    leftDrive.setPower(0);
+                    rightDrive.setPower(0);
+                    GrabRight1.setPower(1);
+                    GrabLeft2.setPower(1);
+                    GrabLeft1.setPower(1);
                 }
 
             }
             else {
                 telemetry.addData("VuMark", "Nothing Visible");
             }
-
-            leftDrive.setPower(leftPower);
-            rightDrive.setPower(rightPower);
-
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-            telemetry.update();
         }
     }
 
