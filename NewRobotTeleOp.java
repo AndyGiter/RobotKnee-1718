@@ -18,11 +18,10 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp
 public class NewRobotTeleOp extends LinearOpMode {
 
-    double SlowDown;
-    double SlowWayDown;
-    int Reverse;
     boolean BackClaw;
-    double ServoPosition;
+    boolean Grab;
+    double LiftyClawServoPosition;
+    double GrabbyClawServoPosition;
 
     DcMotor FrontRightMech;
     DcMotor FrontLeftMech;
@@ -39,12 +38,6 @@ public class NewRobotTeleOp extends LinearOpMode {
 
 @Override
 public void runOpMode() {
-
-    telemetry.addData("Status", "Initialized");
-    telemetry.addData("SlowDown", "False");
-    telemetry.addData("SlowWayDown","False");
-    telemetry.addData("Reverse","False");
-    telemetry.update();
 
     FrontLeftMech = hardwareMap.dcMotor.get("FrontLeftMech");
     FrontRightMech = hardwareMap.dcMotor.get("FrontRightMech");
@@ -67,70 +60,16 @@ public void runOpMode() {
     BackRightClaw.setDirection(Servo.Direction.FORWARD);
     BackLeftClaw.setDirection(Servo.Direction.FORWARD);
     GrabbyClaw.setDirection(Servo.Direction.FORWARD);
-    LiftyClaw.setDirection(Servo.Direction.FORWARD);
+    LiftyClaw.setDirection(Servo.Direction.REVERSE);
     RotateBlock.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     waitForStart();
-    SlowDown = 1;
-    SlowWayDown = 1;
-    Reverse = 1;
     BackClaw = false;
+    Grab = true;
+    LiftyClaw.setPosition(0);
+    GrabbyClaw.setPosition(1);
     while (opModeIsActive()) {
-        
-        if (gamepad1.a && Reverse == 1) {
-            Reverse = -1;
-            telemetry.addData("Reverse","True");
-            telemetry.update();
-            sleep(75);
-        }
-        else if (gamepad1.a && Reverse == -1) {
-            Reverse = 1;
-            telemetry.addData("Reverse","False");
-            telemetry.update();
-            sleep(75);
-        }
-        if (gamepad1.x && SlowDown == 1) {
-            SlowDown = 0.5;
-/*            while (gamepad1.left_trigger == 1) {
-                LiftRight.setPower(0.5);
-                LiftLeft.setPower(0.5);
-            }
-
-            while (gamepad1.left_bumper) {
-                LiftRight.setPower(-0.5);
-                LiftLeft.setPower(-0.5);
-            }
-
-
-        if (gamepad1.right_bumper) {
-            GrabLeft1.setPower(-0.5);
-            GrabLeft2.setPower(-0.5);
-            GrabRight1.setPower(-0.5);
-        }
-
-        if (gamepad1.right_trigger == 1) {
-            GrabRight1.setPower(0.5);
-            GrabLeft2.setPower(0.5);
-            GrabLeft1.setPower(0.5);
-        }
-*/
-            telemetry.addData("SlowDown", "True");
-            telemetry.update();
-
-
-        }
-        else if (gamepad1.x && SlowDown == 0.5) {
-            SlowDown = 1;
-            /*while (gamepad1.left_bumper) {
-                LiftRight.setPower(1);
-                LiftLeft.setPower(1);
-            }
-
-            while (gamepad1.left_trigger == 1) {
-                LiftRight.setPower(-1);
-                LiftLeft.setPower(-1);
-            }
-
+/*        
 
         if (gamepad1.right_bumper) {
             GrabLeft1.setPower(-1);
@@ -144,87 +83,18 @@ public void runOpMode() {
             GrabLeft1.setPower(1);
         }
 */
-            telemetry.addData("SlowDown", "False");
-            telemetry.update();
-
-        }
-        if (gamepad1.y && SlowWayDown == 1) {
-            SlowWayDown = 0.25;
-/*            while (gamepad1.left_bumper) {
-                LiftRight.setPower(0.25);
-                LiftLeft.setPower(0.25);
-            }
-
-            while (gamepad1.left_trigger == 1) {
-                LiftRight.setPower(-0.25);
-                LiftLeft.setPower(-0.25);
-            }
-
-
-            if (gamepad1.right_bumper) {
-                GrabLeft1.setPower(-0.25);
-                GrabLeft2.setPower(-0.25);
-                GrabRight1.setPower(-0.25);
-            }
-
-            if (gamepad1.right_trigger == 1) {
-                GrabRight1.setPower(0.25);
-                GrabLeft2.setPower(0.25);
-                GrabLeft1.setPower(0.25);
-            }
-*/
-            telemetry.addData("SlowWayDown", "True");
-            telemetry.update();
-        }
-        else if (gamepad1.y && SlowWayDown == 0.25) {
-            SlowWayDown = 1;
-/*            while (gamepad1.left_bumper) {
-                LiftRight.setPower(1);
-                LiftLeft.setPower(1);
-            }
-
-            while (gamepad1.left_trigger == 1) {
-                LiftRight.setPower(-1);
-                LiftLeft.setPower(-1);
-            }
-
-
-            if (gamepad1.right_bumper) {
-                GrabLeft1.setPower(-1);
-                GrabLeft2.setPower(-1);
-                GrabRight1.setPower(-1);
-            }
-
-            if (gamepad1.right_trigger == 1) {
-                GrabRight1.setPower(1);
-                GrabLeft2.setPower(1);
-                GrabLeft1.setPower(1);
-            }
-*/
-            telemetry.addData("SlowWayDown", "False");
-            telemetry.update();
-        }
-        
-        if(gamepad1.b){
-            FrontLeftMech.setPower(0);
-            FrontRightMech.setPower(0);
-            BackLeftMech.setPower(0);
-            BackRightMech.setPower(0);
-            LeftWheel.setPower(0);
-            RightWheel.setPower(0);
-        }
         
         if (gamepad1.right_stick_y != 0 && gamepad1.right_stick_x == 0){
             FrontLeftMech.setDirection(DcMotor.Direction.REVERSE);
             FrontRightMech.setDirection(DcMotor.Direction.FORWARD);
             BackLeftMech.setDirection(DcMotor.Direction.REVERSE);
             BackRightMech.setDirection(DcMotor.Direction.FORWARD);
-            FrontLeftMech.setPower(gamepad1.right_stick_y*Reverse*SlowDown*SlowWayDown);
-            FrontRightMech.setPower(gamepad1.right_stick_y*Reverse*SlowDown*SlowWayDown);
-            BackLeftMech.setPower(gamepad1.right_stick_y*Reverse*SlowDown*SlowWayDown);
-            BackRightMech.setPower(gamepad1.right_stick_y*Reverse*SlowDown*SlowWayDown);
-            LeftWheel.setPower(gamepad1.right_stick_y*Reverse*SlowDown*SlowWayDown);
-            RightWheel.setPower(gamepad1.right_stick_y*Reverse*SlowDown*SlowWayDown);
+            FrontLeftMech.setPower(gamepad1.right_stick_y);
+            FrontRightMech.setPower(gamepad1.right_stick_y);
+            BackLeftMech.setPower(gamepad1.right_stick_y);
+            BackRightMech.setPower(gamepad1.right_stick_y);
+            LeftWheel.setPower(gamepad1.right_stick_y);
+            RightWheel.setPower(gamepad1.right_stick_y);
         }
         
         if (gamepad1.right_stick_x != 0 && gamepad1.right_stick_y == 0){
@@ -232,10 +102,10 @@ public void runOpMode() {
             FrontRightMech.setDirection(DcMotor.Direction.FORWARD);
             BackLeftMech.setDirection(DcMotor.Direction.REVERSE);
             BackRightMech.setDirection(DcMotor.Direction.REVERSE);
-            FrontLeftMech.setPower(gamepad1.right_stick_x*Reverse*SlowDown*SlowWayDown);
-            FrontRightMech.setPower(gamepad1.right_stick_x*Reverse*SlowDown*SlowWayDown);
-            BackLeftMech.setPower(gamepad1.right_stick_x*Reverse*SlowDown*SlowWayDown);
-            BackRightMech.setPower(gamepad1.right_stick_x*Reverse*SlowDown*SlowWayDown);
+            FrontLeftMech.setPower(gamepad1.right_stick_x);
+            FrontRightMech.setPower(gamepad1.right_stick_x);
+            BackLeftMech.setPower(gamepad1.right_stick_x);
+            BackRightMech.setPower(gamepad1.right_stick_x);
         }
         
         if (gamepad1.left_stick_x != 0){
@@ -267,6 +137,44 @@ public void runOpMode() {
                 BackClaw = true;
                 telemetry.addData("Back Claw", "Closed");
                 telemetry.update();
+            }
+        }
+        
+        if (gamepad1.left_stick_y != 0 && gamepad1.left_stick_x == 0){
+            LiftyArm.setPower(gamepad1.left_stick_y);
+        }
+        else {
+            LiftyArm.setPower(0);
+        }
+        
+        if (gamepad1.right_bumper){
+            LiftyClawServoPosition = LiftyClawServoPosition + .05;
+            LiftyClaw.setPosition(LiftyClawServoPosition);
+        }
+        
+        if (gamepad1.right_trigger >= 0.2){
+            LiftyClawServoPosition = LiftyClawServoPosition - .05;
+            LiftyClaw.setPosition(LiftyClawServoPosition);
+        }
+        
+        if (gamepad1.left_bumper){
+            GrabbyClawServoPosition = GrabbyClawServoPosition - .05;
+            GrabbyClaw.setPosition(GrabbyClawServoPosition);
+        }
+        
+        if (gamepad1.left_trigger >= 0.2){
+            GrabbyClawServoPosition = GrabbyClawServoPosition + .05;
+            GrabbyClaw.setPosition(GrabbyClawServoPosition);
+        }
+        
+        if (gamepad1.a){
+            if(Grab){
+                GrabbyClaw.setPosition(1);
+                Grab = false;
+            }
+            else{
+                GrabbyClaw.setPosition(0);
+                Grab = true;
             }
         }
 
