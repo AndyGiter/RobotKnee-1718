@@ -11,9 +11,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@Autonomous
+@Autonomous(name="AutoRedAudience", group ="Concept")
 
-public class NewRobotAuto extends LinearOpMode{
+public class AutoRedAudience extends LinearOpMode{
 
     DcMotor FrontRightMech;
     DcMotor FrontLeftMech;
@@ -97,7 +97,7 @@ public class NewRobotAuto extends LinearOpMode{
             BackRightMech.setPower(.3);
             LeftWheel.setPower(.3);
             RightWheel.setPower(.3);
-            sleep(2500);
+            sleep(2000);
             FrontLeftMech.setPower(0);
             FrontRightMech.setPower(0);
             BackLeftMech.setPower(0);
@@ -111,7 +111,7 @@ public class NewRobotAuto extends LinearOpMode{
             BackRightMech.setPower(.3);
             LeftWheel.setPower(-.3);
             RightWheel.setPower(.3);
-            sleep(2500);
+            sleep(1700);
             FrontLeftMech.setPower(0);
             FrontRightMech.setPower(0);
             BackLeftMech.setPower(0);
@@ -142,7 +142,7 @@ public class NewRobotAuto extends LinearOpMode{
             BackRightMech.setPower(.3);
             LeftWheel.setPower(.3);
             RightWheel.setPower(.3);
-            sleep(1000);
+            sleep(750);
             FrontLeftMech.setPower(0);
             FrontRightMech.setPower(0);
             BackLeftMech.setPower(0);
@@ -173,11 +173,11 @@ public class NewRobotAuto extends LinearOpMode{
             RightWheel.setPower(0);*/
             
             RotateBlock.setPower(.2);
-            sleep(500);
+            sleep(200);
             RotateBlock.setPower(0);
-            sleep(500);
+            sleep(2000);
             RotateBlock.setPower(-.2);
-            sleep(500);
+            sleep(200);
             RotateBlock.setPower(0);
             sleep(50000);
             
