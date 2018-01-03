@@ -171,12 +171,6 @@ public void runOpMode() {
         else if (Math.abs(gamepad1.left_stick_y) >= 0.2 && Math.abs(gamepad1.left_stick_x) <= 0.2){
             UpWinch.setPower(gamepad1.left_stick_y);
         }
-        if (gamepad1.back){
-            UpWinch.setPower(0.3);
-        }
-        if (gamepad1.start){
-            UpWinch.setPower(-0.3);
-        }
         else {
             FrontLeft.setPower(0);
             FrontRight.setPower(0);
@@ -185,10 +179,10 @@ public void runOpMode() {
             UpWinch.setPower(0);
         }
         
-        if (gamepad1.dpad_up){
+        if (gamepad1.dpad_down){
             RotateBlock.setPower(.5);
         }
-        else if (gamepad1.dpad_down){
+        else if (gamepad1.back){
             RotateBlock.setPower(-.5);
         }
         else {
