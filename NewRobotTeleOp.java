@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -19,203 +22,251 @@ import com.qualcomm.robotcore.util.Range;
 public class NewRobotTeleOp extends LinearOpMode {
 
     boolean BackClaw;
-    boolean Grab;
-    double LiftyClawServoPosition;
-    double GrabbyClawServoPosition;
+    boolean Claw;
+    boolean XPress;
+    boolean YPress;
+    boolean Press;
+    boolean FULLPOWAH;
+    double HalfSpeed;
+    double back;
+    double ClawPosition;
+    String BackClawString;
+    String ClawString;
+    String BackString;
 
-    DcMotor FrontRightMech;
-    DcMotor FrontLeftMech;
-    DcMotor BackRightMech;
-    DcMotor BackLeftMech;
-    DcMotor LeftWheel;
-    DcMotor RightWheel;
+    DcMotor FrontRight;
+    DcMotor FrontLeft;
+    DcMotor BackRight;
+    DcMotor BackLeft;
+    DcMotor UpWinch;
     DcMotor RotateBlock;
-    DcMotor LiftyArm;
-    Servo BackRightClaw;
-    Servo BackLeftClaw;
-    Servo GrabbyClaw;
-    Servo LiftyClaw;
+    Servo BackRightServo;
+    Servo BackLeftServo;
+    Servo FrontLeftServo;
+    Servo FrontRightServo;
+    CRServo JewelArm;
+    CRServo ClawServo;
 
 @Override
 public void runOpMode() {
 
-    FrontLeftMech = hardwareMap.dcMotor.get("FrontLeftMech");
-    FrontRightMech = hardwareMap.dcMotor.get("RightWheel");
-    BackLeftMech = hardwareMap.dcMotor.get("BackLeftMech");
-    BackRightMech = hardwareMap.dcMotor.get("BackRightMech");
-    LeftWheel = hardwareMap.dcMotor.get("LeftWheel");
-    RightWheel =hardwareMap.dcMotor.get("FrontRightMech");
+    FrontLeft = hardwareMap.dcMotor.get("FrontLeft");
+    FrontRight = hardwareMap.dcMotor.get("FrontRight");
+    BackLeft = hardwareMap.dcMotor.get("BackLeft");
+    BackRight = hardwareMap.dcMotor.get("BackRight");
+    UpWinch = hardwareMap.dcMotor.get("UpWinch");
     RotateBlock = hardwareMap.dcMotor.get("RotateBlock");
-    LiftyArm = hardwareMap.dcMotor.get("LiftyArm");
-    BackRightClaw = hardwareMap.servo.get("BackRightClaw");
-    BackLeftClaw = hardwareMap.servo.get("BackLeftClaw");
-    GrabbyClaw = hardwareMap.servo.get("GrabbyClaw");
-    LiftyClaw = hardwareMap.servo.get("LiftyClaw");
-    FrontLeftMech.setDirection(DcMotor.Direction.REVERSE);
-    FrontRightMech.setDirection(DcMotor.Direction.FORWARD);
-    BackLeftMech.setDirection(DcMotor.Direction.REVERSE);
-    BackRightMech.setDirection(DcMotor.Direction.FORWARD);
-    LeftWheel.setDirection(DcMotor.Direction.REVERSE);
-    RightWheel.setDirection(DcMotor.Direction.FORWARD);
+    BackRightServo = hardwareMap.servo.get("BackRightServo");
+    BackLeftServo = hardwareMap.servo.get("BackLeftServo");
+    FrontLeftServo = hardwareMap.servo.get("FrontLeftServo");
+    FrontRightServo = hardwareMap.servo.get("FrontRightServo");
+    JewelArm = hardwareMap.crservo.get("JewelArm");
+    ClawServo = hardwareMap.crservo.get("ClawServo");
+    FrontLeft.setDirection(DcMotor.Direction.REVERSE);
+    FrontRight.setDirection(DcMotor.Direction.FORWARD);
+    BackLeft.setDirection(DcMotor.Direction.REVERSE);
+    BackRight.setDirection(DcMotor.Direction.FORWARD);
+    UpWinch.setDirection(DcMotor.Direction.FORWARD);
     RotateBlock.setDirection(DcMotor.Direction.REVERSE);
-    BackRightClaw.setDirection(Servo.Direction.FORWARD);
-    BackLeftClaw.setDirection(Servo.Direction.FORWARD);
-    GrabbyClaw.setDirection(Servo.Direction.FORWARD);
-    LiftyClaw.setDirection(Servo.Direction.FORWARD);
+    BackRightServo.setDirection(Servo.Direction.FORWARD);
+    BackLeftServo.setDirection(Servo.Direction.FORWARD);
+    FrontLeftServo.setDirection(Servo.Direction.FORWARD);
+    FrontRightServo.setDirection(Servo.Direction.REVERSE);
+    JewelArm.setDirection(CRServo.Direction.FORWARD);
+    ClawServo.setDirection(CRServo.Direction.REVERSE);
     
     waitForStart();
-    BackClaw = false;
-    Grab = true;
-    LiftyClaw.setPosition(0.42);
-    GrabbyClaw.setPosition(1);
+    BackLeftServo.setPosition(0.5);
+    BackRightServo.setPosition(0.15);
+    FrontLeftServo.setPosition(0);
+    FrontRightServo.setPosition(0);
+    XPress = false;
+    YPress = false;
+    Press = false;
+    FULLPOWAH = false;
+    HalfSpeed = 1;
+    back = 1;
+    ClawPosition = 0.5;
+    BackClawString = "Open";
+    ClawString = "Closed";
+    BackString = "Forwards";
+    telemetry.addData("Speed:", HalfSpeed);
+    telemetry.addData("Direction", BackString);
+    telemetry.addData("Back Claw", BackClawString);
+    telemetry.addData("Claw", ClawString);
+    telemetry.update();
     while (opModeIsActive()) {
         
+        if (gamepad1.right_stick_button){
+            Press = true;
+        }
+        else if (Press){
+            if (HalfSpeed == 1){
+                HalfSpeed = 0.5;
+                Press = false;
+            }
+            else {
+                HalfSpeed = 1;
+                Press = false;
+            }
+            telemetry.addData("Speed:", HalfSpeed);
+            telemetry.addData("Direction", BackString);
+            telemetry.addData("Back Claw", BackClawString);
+            telemetry.addData("Claw", ClawString);
+            telemetry.update();
+        }
+        
+        if (gamepad1.y){
+            YPress = true;
+        }
+        else if (YPress){
+            if (back == -1){
+                back = 1;
+                BackString = "Forwards";
+            }
+            else if (back == 1){
+                back = -1;
+                BackString = "Backwards";
+            }
+            YPress = false;
+            telemetry.addData("Speed:", HalfSpeed);
+            telemetry.addData("Direction", BackString);
+            telemetry.addData("Back Claw", BackClawString);
+            telemetry.addData("Claw", ClawString);
+            telemetry.update();
+        }
+        
         if (Math.abs(gamepad1.right_stick_y) >= 0.2 && Math.abs(gamepad1.right_stick_x) <= 0.2){
-            FrontLeftMech.setDirection(DcMotor.Direction.FORWARD);
-            FrontRightMech.setDirection(DcMotor.Direction.REVERSE);
-            BackLeftMech.setDirection(DcMotor.Direction.FORWARD);
-            BackRightMech.setDirection(DcMotor.Direction.REVERSE);
-            LeftWheel.setDirection(DcMotor.Direction.FORWARD);
-            RightWheel.setDirection(DcMotor.Direction.REVERSE);
-            FrontLeftMech.setPower(gamepad1.right_stick_y);
-            FrontRightMech.setPower(gamepad1.right_stick_y);
-            BackLeftMech.setPower(gamepad1.right_stick_y);
-            BackRightMech.setPower(gamepad1.right_stick_y);
-            LeftWheel.setPower(gamepad1.right_stick_y);
-            RightWheel.setPower(gamepad1.right_stick_y);
+            FrontLeft.setDirection(DcMotor.Direction.REVERSE);
+            FrontRight.setDirection(DcMotor.Direction.REVERSE);
+            BackLeft.setDirection(DcMotor.Direction.REVERSE);
+            BackRight.setDirection(DcMotor.Direction.REVERSE);
+            FrontLeft.setPower(gamepad1.right_stick_y*HalfSpeed*back);
+            FrontRight.setPower(gamepad1.right_stick_y*HalfSpeed*back);
+            BackLeft.setPower(gamepad1.right_stick_y*HalfSpeed*back);
+            BackRight.setPower(gamepad1.right_stick_y*HalfSpeed*back);
         }
         
         else if (Math.abs(gamepad1.right_stick_x) >= 0.2 && Math.abs(gamepad1.right_stick_y) <= 0.2){
-            FrontLeftMech.setDirection(DcMotor.Direction.REVERSE);
-            RightWheel.setDirection(DcMotor.Direction.REVERSE);
-            BackLeftMech.setDirection(DcMotor.Direction.FORWARD);
-            BackRightMech.setDirection(DcMotor.Direction.FORWARD);
-            FrontLeftMech.setPower(gamepad1.right_stick_x);
-            RightWheel.setPower(gamepad1.right_stick_x);
-            BackLeftMech.setPower(gamepad1.right_stick_x);
-            BackRightMech.setPower(gamepad1.right_stick_x);
+            FrontLeft.setDirection(DcMotor.Direction.FORWARD);
+            FrontRight.setDirection(DcMotor.Direction.REVERSE);
+            BackLeft.setDirection(DcMotor.Direction.REVERSE);
+            BackRight.setDirection(DcMotor.Direction.FORWARD);
+            FrontLeft.setPower(gamepad1.right_stick_x*HalfSpeed*back);
+            FrontRight.setPower(gamepad1.right_stick_x*HalfSpeed*back);
+            BackLeft.setPower(gamepad1.right_stick_x*HalfSpeed*back);
+            BackRight.setPower(gamepad1.right_stick_x*HalfSpeed*back);
         }
         
         else if (Math.abs(gamepad1.left_stick_x) >= 0.2 && Math.abs(gamepad1.left_stick_y) <= 0.2){
-            LeftWheel.setDirection(DcMotor.Direction.REVERSE);
-            RightWheel.setDirection(DcMotor.Direction.REVERSE);
-            FrontRightMech.setDirection(DcMotor.Direction.REVERSE);
-            FrontLeftMech.setDirection(DcMotor.Direction.REVERSE);
-            BackLeftMech.setDirection(DcMotor.Direction.REVERSE);
-            BackRightMech.setDirection(DcMotor.Direction.REVERSE);
-            LeftWheel.setPower(gamepad1.left_stick_x);
-            RightWheel.setPower(gamepad1.left_stick_x);
-            FrontRightMech.setPower(gamepad1.left_stick_x);
-            FrontLeftMech.setPower(gamepad1.left_stick_x);
-            BackLeftMech.setPower(gamepad1.left_stick_x);
-            BackRightMech.setPower(gamepad1.left_stick_x);
+            FrontRight.setDirection(DcMotor.Direction.REVERSE);
+            FrontLeft.setDirection(DcMotor.Direction.FORWARD);
+            BackLeft.setDirection(DcMotor.Direction.FORWARD);
+            BackRight.setDirection(DcMotor.Direction.REVERSE);
+            FrontRight.setPower(gamepad1.left_stick_x*HalfSpeed*back);
+            FrontLeft.setPower(gamepad1.left_stick_x*HalfSpeed*back);
+            BackLeft.setPower(gamepad1.left_stick_x*HalfSpeed*back);
+            BackRight.setPower(gamepad1.left_stick_x*HalfSpeed*back);
         }
         else if (Math.abs(gamepad1.left_stick_y) >= 0.2 && Math.abs(gamepad1.left_stick_x) <= 0.2){
-            LiftyArm.setPower(gamepad1.left_stick_y);
+            UpWinch.setPower(gamepad1.left_stick_y);
+        }
+        if (gamepad1.back){
+            UpWinch.setPower(0.3);
+        }
+        if (gamepad1.start){
+            UpWinch.setPower(-0.3);
         }
         else {
-            FrontLeftMech.setPower(0);
-            FrontRightMech.setPower(0);
-            BackLeftMech.setPower(0);
-            BackRightMech.setPower(0);
-            LeftWheel.setPower(0);
-            RightWheel.setPower(0);
-            LiftyArm.setPower(0);
+            FrontLeft.setPower(0);
+            FrontRight.setPower(0);
+            BackLeft.setPower(0);
+            BackRight.setPower(0);
+            UpWinch.setPower(0);
         }
         
         if (gamepad1.dpad_down){
-            RotateBlock.setPower(.25);
+            RotateBlock.setPower(.5);
+        }
+        else if (gamepad1.dpad_up){
+            RotateBlock.setPower(-.5);
         }
         else {
             RotateBlock.setPower(0);
-        }
-        
-        if (gamepad1.dpad_up){
-            RotateBlock.setPower(-.25);
-        }
-        else {
-            RotateBlock.setPower(0);
-        }
-        
-        if (gamepad1.b){
-                BackLeftClaw.setPosition(0);
-                BackRightClaw.setPosition(1);
-                BackClaw = false;
-                telemetry.addData("Back Claw", "Open");
-                telemetry.update();
-        }
-        
-        if (gamepad1.right_bumper){
-            LiftyClaw.setPosition(1);
-        }
-        else if (gamepad1.right_trigger >= 0.2){
-            LiftyClaw.setPosition(0);
-        }
-        else {
-            LiftyClaw.setPosition(0.42);
-        }
-        
-        if (gamepad1.left_bumper){
-            GrabbyClaw.setPosition(1);
         }
         
         if (gamepad1.left_trigger >= 0.2){
-            GrabbyClaw.setPosition(0);
+            BackLeftServo.setPosition(0.5);
+            BackRightServo.setPosition(0.15);
+            BackClawString = "Open";
+            telemetry.addData("Speed:", HalfSpeed);
+            telemetry.addData("Direction", BackString);
+            telemetry.addData("Back Claw", BackClawString);
+            telemetry.addData("Claw", ClawString);
+            telemetry.update();
+        }
+            
+        else if (gamepad1.left_bumper) {
+            BackLeftServo.setPosition(.65);
+            BackRightServo.setPosition(0);
+            BackClawString = "Closed";
+            telemetry.addData("Speed:", HalfSpeed);
+            telemetry.addData("Direction", BackString);
+            telemetry.addData("Back Claw", BackClawString);
+            telemetry.addData("Claw", ClawString);
+            telemetry.update();
         }
         
-        if (gamepad1.a){
-                BackLeftClaw.setPosition(.65);
-                BackRightClaw.setPosition(0);
-                BackClaw = true;
-                telemetry.addData("Back Claw", "Closed");
-                telemetry.update();
+        if (gamepad1.right_trigger >= 0.2){
+            FrontLeftServo.setPosition(1);
+            FrontRightServo.setPosition(1);
         }
-
-        /*if (gamepad1.left_stick_y >= 0.1 || gamepad1.left_stick_y <= -0.1) {
-            Left.setPower(gamepad1.left_stick_y);
-            Right.setPower(gamepad1.left_stick_y);
+        else if (gamepad1.right_bumper){
+            FrontLeftServo.setPosition(1);
+            FrontRightServo.setPosition(0);
         }
-        if (gamepad1.left_stick_x >= 0.1 || gamepad1.left_stick_x <= -0.1) {
-            Left.setPower(gamepad1.left_stick_x);
-            Right.setPower(gamepad1.left_stick_x * -1);
-        }*/
-
-
-/*        if (gamepad1.right_bumper) {
-            GrabLeft1.setPower(-1);
-            GrabLeft2.setPower(-1);
-            GrabRight1.setPower(-1);
-        }
-        else if (gamepad1.right_trigger == 1) {
-            GrabRight1.setPower(1);
-            GrabLeft2.setPower(1);
-            GrabLeft1.setPower(1);
-        }
-
         else {
-            GrabLeft2.setPower(0);
-            GrabRight1.setPower(0);
-            GrabLeft1.setPower(0);
+            FrontLeftServo.setPosition(0);
+            FrontRightServo.setPosition(0);
         }
-
-
-
-
-        if (gamepad1.left_trigger == 1) {
-            LiftRight.setPower(1);
-            LiftLeft.setPower(1);
+        
+        if (gamepad1.dpad_left){
+            JewelArm.setPower(-1);
         }
-
-        else if (gamepad1.left_bumper) {
-            LiftRight.setPower(-1);
-            LiftLeft.setPower(-1);
+        else if (gamepad1.dpad_right){
+            JewelArm.setPower(1);
         }
-
         else {
-            LiftRight.setPower(0);
-            LiftLeft.setPower(0);
+            JewelArm.setPower(0);
         }
-*/
+        
+        if (gamepad1.x){
+            XPress = true;
+        }
+        else if (XPress){
+            if (FULLPOWAH){ 
+                FULLPOWAH = false;
+            }
+            else if (FULLPOWAH == false){
+                FULLPOWAH = true;
+            }
+            XPress = false;
+        }
+        if (gamepad1.y || gamepad1.a | gamepad1.b){
+            FULLPOWAH = false;
+        }
+        if (FULLPOWAH){
+            ClawServo.setPower(0);
+        }
+        else if (gamepad1.a){
+            ClawServo.setPower(0.105);
+        }
+        else if (gamepad1.b){
+            ClawServo.setPower(0.205);
+        }
+        else {
+            ClawServo.setPower(0.155);
+        }
         }
     }
 }
