@@ -137,9 +137,9 @@ public void runOpMode() {
         }
         
         if (Math.abs(gamepad1.right_stick_y) >= 0.2 && Math.abs(gamepad1.right_stick_x) <= 0.2){
-            FrontLeft.setDirection(DcMotor.Direction.REVERSE);
+            FrontLeft.setDirection(DcMotor.Direction.FORWARD);
             FrontRight.setDirection(DcMotor.Direction.REVERSE);
-            BackLeft.setDirection(DcMotor.Direction.REVERSE);
+            BackLeft.setDirection(DcMotor.Direction.FORWARD);
             BackRight.setDirection(DcMotor.Direction.REVERSE);
             FrontLeft.setPower(gamepad1.right_stick_y*HalfSpeed*back);
             FrontRight.setPower(gamepad1.right_stick_y*HalfSpeed*back);
@@ -148,9 +148,9 @@ public void runOpMode() {
         }
         
         else if (Math.abs(gamepad1.right_stick_x) >= 0.2 && Math.abs(gamepad1.right_stick_y) <= 0.2){
-            FrontLeft.setDirection(DcMotor.Direction.FORWARD);
+            FrontLeft.setDirection(DcMotor.Direction.REVERSE);
             FrontRight.setDirection(DcMotor.Direction.REVERSE);
-            BackLeft.setDirection(DcMotor.Direction.REVERSE);
+            BackLeft.setDirection(DcMotor.Direction.FORWARD);
             BackRight.setDirection(DcMotor.Direction.FORWARD);
             FrontLeft.setPower(gamepad1.right_stick_x*HalfSpeed*back);
             FrontRight.setPower(gamepad1.right_stick_x*HalfSpeed*back);
@@ -160,8 +160,8 @@ public void runOpMode() {
         
         else if (Math.abs(gamepad1.left_stick_x) >= 0.2 && Math.abs(gamepad1.left_stick_y) <= 0.2){
             FrontRight.setDirection(DcMotor.Direction.REVERSE);
-            FrontLeft.setDirection(DcMotor.Direction.FORWARD);
-            BackLeft.setDirection(DcMotor.Direction.FORWARD);
+            FrontLeft.setDirection(DcMotor.Direction.REVERSE);
+            BackLeft.setDirection(DcMotor.Direction.REVERSE);
             BackRight.setDirection(DcMotor.Direction.REVERSE);
             FrontRight.setPower(gamepad1.left_stick_x*HalfSpeed*back);
             FrontLeft.setPower(gamepad1.left_stick_x*HalfSpeed*back);
@@ -185,10 +185,10 @@ public void runOpMode() {
             UpWinch.setPower(0);
         }
         
-        if (gamepad1.dpad_down){
+        if (gamepad1.dpad_up){
             RotateBlock.setPower(.5);
         }
-        else if (gamepad1.dpad_up){
+        else if (gamepad1.dpad_down){
             RotateBlock.setPower(-.5);
         }
         else {
