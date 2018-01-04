@@ -293,10 +293,10 @@ public class AutoRedAudience extends LinearOpMode{
             FrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            FrontLeft.setTargetPosition(5*TickToInch);
-            FrontRight.setTargetPosition(5*TickToInch);
-            BackLeft.setTargetPosition(5*TickToInch);
-            BackRight.setTargetPosition(5*TickToInch);
+            FrontLeft.setTargetPosition(1*TickToInch);
+            FrontRight.setTargetPosition(1*TickToInch);
+            BackLeft.setTargetPosition(1*TickToInch);
+            BackRight.setTargetPosition(1*TickToInch);
             FrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             FrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             BackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
