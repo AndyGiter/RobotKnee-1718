@@ -60,7 +60,6 @@ public class AutoRedBack extends LinearOpMode{
         
         waitForStart();
         TickToInch = 89;
-        while (opModeIsActive()){
             FrontLeftServo.setPosition(0);
             FrontRightServo.setPosition(0);
             while (opModeIsActive()){
@@ -252,9 +251,6 @@ public class AutoRedBack extends LinearOpMode{
             BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             sleep(500);
-            BackLeftServo.setPosition(0.5);
-            BackRightServo.setPosition(0.15);
-            sleep(500);
             FrontLeft.setDirection(DcMotor.Direction.FORWARD);
             FrontRight.setDirection(DcMotor.Direction.REVERSE);
             BackLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -285,6 +281,9 @@ public class AutoRedBack extends LinearOpMode{
             BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             sleep(500);
+            BackLeftServo.setPosition(0.5);
+            BackRightServo.setPosition(0.15);
+            sleep(500);
             FrontLeft.setDirection(DcMotor.Direction.REVERSE);
             FrontRight.setDirection(DcMotor.Direction.FORWARD);
             BackLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -293,10 +292,10 @@ public class AutoRedBack extends LinearOpMode{
             FrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            FrontLeft.setTargetPosition(1*TickToInch);
-            FrontRight.setTargetPosition(1*TickToInch);
-            BackLeft.setTargetPosition(1*TickToInch);
-            BackRight.setTargetPosition(1*TickToInch);
+            FrontLeft.setTargetPosition(3*TickToInch);
+            FrontRight.setTargetPosition(3*TickToInch);
+            BackLeft.setTargetPosition(3*TickToInch);
+            BackRight.setTargetPosition(3*TickToInch);
             FrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             FrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             BackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -314,7 +313,6 @@ public class AutoRedBack extends LinearOpMode{
             FrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            sleep(500);
             JewelArm.setPower(0);
             break;
             
@@ -461,7 +459,6 @@ public class AutoRedBack extends LinearOpMode{
             RotateBlock.setPower(0);
             
             sleep(50000);*/
-            }
         }
     }
 }
