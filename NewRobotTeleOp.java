@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -39,6 +40,7 @@ public class NewRobotTeleOp extends LinearOpMode {
     DcMotor BackRight;
     DcMotor BackLeft;
     DcMotor UpWinch;
+    DcMotor DownWinch;
     DcMotor RotateBlock;
     Servo BackRightServo;
     Servo BackLeftServo;
@@ -46,6 +48,7 @@ public class NewRobotTeleOp extends LinearOpMode {
     Servo FrontRightServo;
     CRServo JewelArm;
     CRServo ClawServo;
+    DigitalChannel touch;
 
 @Override
 public void runOpMode() {
@@ -55,6 +58,7 @@ public void runOpMode() {
     BackLeft = hardwareMap.dcMotor.get("BackLeft");
     BackRight = hardwareMap.dcMotor.get("BackRight");
     UpWinch = hardwareMap.dcMotor.get("UpWinch");
+    DownWinch = hardwareMap.dcMotor.get("DownWinch");
     RotateBlock = hardwareMap.dcMotor.get("RotateBlock");
     BackRightServo = hardwareMap.servo.get("BackRightServo");
     BackLeftServo = hardwareMap.servo.get("BackLeftServo");
@@ -62,11 +66,13 @@ public void runOpMode() {
     FrontRightServo = hardwareMap.servo.get("FrontRightServo");
     JewelArm = hardwareMap.crservo.get("JewelArm");
     ClawServo = hardwareMap.crservo.get("ClawServo");
+    touch = hardwareMap.digitalChannel.get("touch");
     FrontLeft.setDirection(DcMotor.Direction.REVERSE);
     FrontRight.setDirection(DcMotor.Direction.FORWARD);
     BackLeft.setDirection(DcMotor.Direction.REVERSE);
     BackRight.setDirection(DcMotor.Direction.FORWARD);
     UpWinch.setDirection(DcMotor.Direction.FORWARD);
+    DownWinch.setDirection(DcMotor.Direction.FORWARD);
     RotateBlock.setDirection(DcMotor.Direction.REVERSE);
     BackRightServo.setDirection(Servo.Direction.FORWARD);
     BackLeftServo.setDirection(Servo.Direction.FORWARD);
@@ -74,6 +80,7 @@ public void runOpMode() {
     FrontRightServo.setDirection(Servo.Direction.REVERSE);
     JewelArm.setDirection(CRServo.Direction.FORWARD);
     ClawServo.setDirection(CRServo.Direction.REVERSE);
+    touch.setMode(DigitalChannel.Mode.INPUT);
     
     waitForStart();
     BackLeftServo.setPosition(0.5);
@@ -168,7 +175,7 @@ public void runOpMode() {
             BackLeft.setPower(gamepad1.left_stick_x*HalfSpeed*back);
             BackRight.setPower(gamepad1.left_stick_x*HalfSpeed*back);
         }
-        else if (Math.abs(gamepad1.left_stick_y) >= 0.2 && Math.abs(gamepad1.left_stick_x) <= 0.2){
+        else if (Math.abs(gamepad1.left_stick_y) >= 0.2 && Math.abs(gamepad1.left_stick_x) <= 0.2 && gamepad1.right_bumper == false){
             UpWinch.setPower(gamepad1.left_stick_y);
         }
         else {
@@ -178,11 +185,33 @@ public void runOpMode() {
             BackRight.setPower(0);
             UpWinch.setPower(0);
         }
+        if (gamepad1.left_stick_y < -0.1 && touch.getState() == false && gamepad1.right_bumper == false) {
+            DownWinch.setPower(1);
+        }
+        else if (gamepad1.left_stick_y > 0.1 && touch.getState() && gamepad1.right_bumper == false) {
+            DownWinch.setPower(-1);
+        }
+        else if (gamepad1.right_bumper) {
+            DownWinch.setPower(-1*gamepad1.left_stick_y);
+        }
+        else {
+            DownWinch.setPower(0);
+        }
         
-        if (gamepad1.dpad_down){
+        if (gamepad1.left_stick_y < -0.2 && touch.getState() == false) {
+            DownWinch.setPower(1);
+        }
+        else if (gamepad1.left_stick_y > 0.2 && touch.getState()) {
+            DownWinch.setPower(-1);
+        }
+        else {
+            DownWinch.setPower(0);
+        }
+        
+        if (gamepad1.dpad_up){
             RotateBlock.setPower(.5);
         }
-        else if (gamepad1.back){
+        else if (gamepad1.dpad_down){
             RotateBlock.setPower(-.5);
         }
         else {
@@ -214,10 +243,6 @@ public void runOpMode() {
         if (gamepad1.right_trigger >= 0.2){
             FrontLeftServo.setPosition(1);
             FrontRightServo.setPosition(1);
-        }
-        else if (gamepad1.right_bumper){
-            FrontLeftServo.setPosition(1);
-            FrontRightServo.setPosition(0);
         }
         else {
             FrontLeftServo.setPosition(0);
