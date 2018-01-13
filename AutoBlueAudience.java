@@ -97,6 +97,9 @@ public class AutoBlueAudience extends LinearOpMode{
                 BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 sleep(500);
+                color.enableLed(false);
+                JewelArm.setPower(1);
+                sleep(2000);
                 FrontLeft.setDirection(DcMotor.Direction.REVERSE);
                 FrontRight.setDirection(DcMotor.Direction.FORWARD);
                 BackLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -158,6 +161,9 @@ public class AutoBlueAudience extends LinearOpMode{
                 BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 sleep(500);
+                color.enableLed(false);
+                JewelArm.setPower(1);
+                sleep(2000);
                 FrontLeft.setDirection(DcMotor.Direction.FORWARD);
                 FrontRight.setDirection(DcMotor.Direction.REVERSE);
                 BackLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -188,9 +194,7 @@ public class AutoBlueAudience extends LinearOpMode{
                 BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
-            color.enableLed(false);
-            JewelArm.setPower(1);
-            sleep(2000);
+            sleep(500);
             FrontLeft.setDirection(DcMotor.Direction.REVERSE);
             FrontRight.setDirection(DcMotor.Direction.FORWARD);
             BackLeft.setDirection(DcMotor.Direction.REVERSE);
