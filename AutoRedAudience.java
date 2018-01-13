@@ -13,9 +13,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@Autonomous(name="AutoRedAudience", group ="Concept")
+@Autonomous(name="AutoBlueBack", group ="Concept")
 
-public class AutoRedAudience extends LinearOpMode{
+public class AutoBlueBack extends LinearOpMode{
     int TickToInch;
     
     DcMotor FrontRight;
@@ -66,7 +66,7 @@ public class AutoRedAudience extends LinearOpMode{
             JewelArm.setPower(-1);
             sleep(10000);
             JewelArm.setPower(0);
-            if (color.red() > color.blue()){
+            if (color.blue() > color.red()){
                 FrontLeft.setDirection(DcMotor.Direction.FORWARD);
                 FrontRight.setDirection(DcMotor.Direction.REVERSE);
                 BackLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -97,6 +97,9 @@ public class AutoRedAudience extends LinearOpMode{
                 BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 sleep(500);
+                color.enableLed(false);
+                JewelArm.setPower(1);
+                sleep(2000);
                 FrontLeft.setDirection(DcMotor.Direction.REVERSE);
                 FrontRight.setDirection(DcMotor.Direction.FORWARD);
                 BackLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -127,7 +130,7 @@ public class AutoRedAudience extends LinearOpMode{
                 BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
-            else if (color.blue() > color.red()){
+            else if (color.red() > color.blue()){
                 FrontLeft.setDirection(DcMotor.Direction.REVERSE);
                 FrontRight.setDirection(DcMotor.Direction.FORWARD);
                 BackLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -158,6 +161,9 @@ public class AutoRedAudience extends LinearOpMode{
                 BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 sleep(500);
+                color.enableLed(false);
+                JewelArm.setPower(1);
+                sleep(2000);
                 FrontLeft.setDirection(DcMotor.Direction.FORWARD);
                 FrontRight.setDirection(DcMotor.Direction.REVERSE);
                 BackLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -188,13 +194,11 @@ public class AutoRedAudience extends LinearOpMode{
                 BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
-            color.enableLed(false);
-            JewelArm.setPower(1);
-            sleep(1000);
-            FrontLeft.setDirection(DcMotor.Direction.FORWARD);
-            FrontRight.setDirection(DcMotor.Direction.REVERSE);
-            BackLeft.setDirection(DcMotor.Direction.FORWARD);
-            BackRight.setDirection(DcMotor.Direction.REVERSE);
+            sleep(500);
+            FrontLeft.setDirection(DcMotor.Direction.REVERSE);
+            FrontRight.setDirection(DcMotor.Direction.FORWARD);
+            BackLeft.setDirection(DcMotor.Direction.REVERSE);
+            BackRight.setDirection(DcMotor.Direction.FORWARD);
             FrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             FrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -221,18 +225,18 @@ public class AutoRedAudience extends LinearOpMode{
             BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             sleep(500);
-            FrontLeft.setDirection(DcMotor.Direction.REVERSE);
-            FrontRight.setDirection(DcMotor.Direction.REVERSE);
-            BackLeft.setDirection(DcMotor.Direction.REVERSE);
-            BackRight.setDirection(DcMotor.Direction.REVERSE);
+            FrontLeft.setDirection(DcMotor.Direction.FORWARD);
+            FrontRight.setDirection(DcMotor.Direction.FORWARD);
+            BackLeft.setDirection(DcMotor.Direction.FORWARD);
+            BackRight.setDirection(DcMotor.Direction.FORWARD);
             FrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             FrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            FrontLeft.setTargetPosition(13*TickToInch);
-            FrontRight.setTargetPosition(13*TickToInch);
-            BackLeft.setTargetPosition(13*TickToInch);
-            BackRight.setTargetPosition(13*TickToInch);
+            FrontLeft.setTargetPosition(37*TickToInch);
+            FrontRight.setTargetPosition(37*TickToInch);
+            BackLeft.setTargetPosition(37*TickToInch);
+            BackRight.setTargetPosition(37*TickToInch);
             FrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             FrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             BackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -259,10 +263,10 @@ public class AutoRedAudience extends LinearOpMode{
             FrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            FrontLeft.setTargetPosition(15*TickToInch);
-            FrontRight.setTargetPosition(15*TickToInch);
-            BackLeft.setTargetPosition(15*TickToInch);
-            BackRight.setTargetPosition(15*TickToInch);
+            FrontLeft.setTargetPosition(13*TickToInch);
+            FrontRight.setTargetPosition(13*TickToInch);
+            BackLeft.setTargetPosition(13*TickToInch);
+            BackRight.setTargetPosition(13*TickToInch);
             FrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             FrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             BackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -316,7 +320,6 @@ public class AutoRedAudience extends LinearOpMode{
             JewelArm.setPower(0);
             break;
             
-
             /*FrontLeftMech.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             FrontRightMech.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BackLeftMech.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
