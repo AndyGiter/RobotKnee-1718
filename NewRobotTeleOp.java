@@ -27,6 +27,8 @@ public class NewRobotTeleOp extends LinearOpMode {
     boolean XPress;
     boolean YPress;
     boolean Press;
+    boolean dPadRight;
+    boolean dPadLeft;
     boolean FULLPOWAH;
     double HalfSpeed;
     double back;
@@ -90,6 +92,8 @@ public void runOpMode() {
     XPress = false;
     YPress = false;
     Press = false;
+    dPadRight = false;
+    dPadLeft = false;
     FULLPOWAH = false;
     HalfSpeed = 1;
     back = 1;
@@ -261,11 +265,27 @@ public void runOpMode() {
             FrontRightServo.setPosition(0);
         }
         
-        if (gamepad1.dpad_left){
-            JewelArm.setPower(-1);
+        if (gamepad1.dpad_right){
+            dPadRight = true;
+            dPadLeft = false;
         }
-        else if (gamepad1.dpad_right){
+        else if (gamepad1.dpad_left){
+            dPadLeft = true;
+            dPadRight = false;
+        }
+        else if (gamepad1.dpad_left == false && dPadLeft){
+            JewelArm.setPower(-1);
+            dPadRight = false;
+        }
+        else if (gamepad1.dpad_right == false && dPadRight){
             JewelArm.setPower(1);
+            dPadLeft = false;
+        }
+        else if (gamepad1.dpad_right && dPadRight){
+            dPadRight = false;
+        }
+        else if (gamepad1.dpad_left && dPadLeft){
+            dPadLeft = false;
         }
         else {
             JewelArm.setPower(0);
