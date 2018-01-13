@@ -165,7 +165,7 @@ public void runOpMode() {
             BackRight.setPower(gamepad1.right_stick_x*HalfSpeed*back);
         }
         
-        else if (Math.abs(gamepad1.left_stick_x) >= 0.2 && Math.abs(gamepad1.left_stick_y) <= 0.2 && Math.abs(gamepad1.right_stick_x) <= 0.2 && Math.abs(gamepad1.right_stick_y) <= 0.2){
+        else if (Math.abs(gamepad1.left_stick_x) >= 0.1 && Math.abs(gamepad1.left_stick_y) <= 0.1 && Math.abs(gamepad1.right_stick_x) <= 0.2 && Math.abs(gamepad1.right_stick_y) <= 0.2){
             if (back == 1) {
                 FrontRight.setDirection(DcMotor.Direction.REVERSE);
                 FrontLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -179,15 +179,15 @@ public void runOpMode() {
             else if (back == -1) {
                 FrontRight.setDirection(DcMotor.Direction.REVERSE);
                 FrontLeft.setDirection(DcMotor.Direction.REVERSE);
-                BackLeft.setDirection(DcMotor.Direction.FORWARD);
-                BackRight.setDirection(DcMotor.Direction.FORWARD);
+                BackLeft.setDirection(DcMotor.Direction.REVERSE);
+                BackRight.setDirection(DcMotor.Direction.REVERSE);
                 FrontRight.setPower(gamepad1.left_stick_x*HalfSpeed);
                 FrontLeft.setPower(gamepad1.left_stick_x*HalfSpeed);
                 BackLeft.setPower(gamepad1.left_stick_x*HalfSpeed);
                 BackRight.setPower(gamepad1.left_stick_x*HalfSpeed);
             }
         }
-        else if (Math.abs(gamepad1.left_stick_y) >= 0.2 && Math.abs(gamepad1.left_stick_x) <= 0.2 && gamepad1.right_bumper == false){
+        else if (Math.abs(gamepad1.left_stick_y) >= 0.1 && Math.abs(gamepad1.left_stick_x) <= 0.1 && gamepad1.right_bumper == false){
             UpWinch.setPower(gamepad1.left_stick_y);
         }
         else {
