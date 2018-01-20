@@ -20,7 +20,7 @@ import com.qualcomm.robotcore.util.Range;
  * Created by FTC on 9/26/2017.
  */
 @TeleOp
-public class NewRobotTeleOp extends LinearOpMode {
+public class NEWNEWTeleOp extends LinearOpMode {
 
     boolean BackClaw;
     boolean Claw;
@@ -74,7 +74,7 @@ public void runOpMode() {
     BackLeft.setDirection(DcMotor.Direction.REVERSE);
     BackRight.setDirection(DcMotor.Direction.FORWARD);
     UpWinch.setDirection(DcMotor.Direction.FORWARD);
-    DownWinch.setDirection(DcMotor.Direction.FORWARD);
+    DownWinch.setDirection(DcMotor.Direction.REVERSE);
     RotateBlock.setDirection(DcMotor.Direction.REVERSE);
     BackRightServo.setDirection(Servo.Direction.FORWARD);
     BackLeftServo.setDirection(Servo.Direction.FORWARD);
@@ -169,7 +169,7 @@ public void runOpMode() {
             BackRight.setPower(gamepad1.right_stick_x*HalfSpeed*back);
         }
         
-        else if (Math.abs(gamepad1.left_stick_x) >= 0.1 && Math.abs(gamepad1.left_stick_y) <= 0.1 && Math.abs(gamepad1.right_stick_x) <= 0.2 && Math.abs(gamepad1.right_stick_y) <= 0.2){
+        else if (Math.abs(gamepad1.left_stick_x) >= 0.1 && Math.abs(gamepad1.right_stick_x) <= 0.2 && Math.abs(gamepad1.right_stick_y) <= 0.2){
             if (back == 1) {
                 FrontRight.setDirection(DcMotor.Direction.REVERSE);
                 FrontLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -191,37 +191,42 @@ public void runOpMode() {
                 BackRight.setPower(gamepad1.left_stick_x*HalfSpeed);
             }
         }
-        else if (Math.abs(gamepad1.left_stick_y) >= 0.1 && Math.abs(gamepad1.left_stick_x) <= 0.1 && gamepad1.right_bumper == false){
-            UpWinch.setPower(gamepad1.left_stick_y);
-        }
         else {
             FrontLeft.setPower(0);
             FrontRight.setPower(0);
             BackLeft.setPower(0);
             BackRight.setPower(0);
-            UpWinch.setPower(0);
-        }
-        if (gamepad1.left_stick_y < -0.1 && touch.getState() == false && gamepad1.right_bumper == false) {
-            DownWinch.setPower(1);
-        }
-        else if (gamepad1.left_stick_y > 0.1 && touch.getState() && gamepad1.right_bumper == false) {
-            DownWinch.setPower(-1);
-        }
-        else if (gamepad1.right_bumper) {
-            DownWinch.setPower(-1*gamepad1.left_stick_y);
-        }
-        else {
-            DownWinch.setPower(0);
         }
         
-        if (gamepad1.left_stick_y < -0.2 && touch.getState() == false) {
-            DownWinch.setPower(1);
+        if (gamepad1.left_trigger > 0.2 && gamepad1.right_bumper == false){
+            UpWinch.setPower(-1);
         }
-        else if (gamepad1.left_stick_y > 0.2 && touch.getState()) {
+        else if (gamepad1.left_bumper && gamepad1.right_bumper == false){
+            UpWinch.setPower(1);
+        }
+        else {
+            UpWinch.setPower(0);
+        }
+        
+        if (gamepad1.left_bumper && touch.getState() == false && gamepad1.right_bumper == false) {
             DownWinch.setPower(-1);
+        }
+        else if (gamepad1.left_trigger > 0.2 && touch.getState()) {
+            DownWinch.setPower(1);
         }
         else {
             DownWinch.setPower(0);
+        }
+        if (gamepad1.right_bumper) {
+            if (gamepad1.left_bumper){
+                DownWinch.setPower(-1);
+            }
+            else if (gamepad1.left_trigger > 0.2){
+                DownWinch.setPower(1);
+            }
+            else {
+                DownWinch.setPower(0);
+            }
         }
         
         if (gamepad1.dpad_up){
@@ -234,7 +239,7 @@ public void runOpMode() {
             RotateBlock.setPower(0);
         }
         
-        if (gamepad1.left_trigger >= 0.2){
+        if (gamepad1.dpad_right){
             BackLeftServo.setPosition(0.5);
             BackRightServo.setPosition(0.15);
             BackClawString = "Open";
@@ -245,7 +250,7 @@ public void runOpMode() {
             telemetry.update();
         }
             
-        else if (gamepad1.left_bumper) {
+        else if (gamepad1.dpad_left) {
             BackLeftServo.setPosition(.65);
             BackRightServo.setPosition(0);
             BackClawString = "Closed";
@@ -265,30 +270,34 @@ public void runOpMode() {
             FrontRightServo.setPosition(0);
         }
         
-        if (gamepad1.dpad_right){
+        if (gamepad2.dpad_right){
             dPadRight = true;
             dPadLeft = false;
         }
-        else if (gamepad1.dpad_left){
+        else if (gamepad2.dpad_left){
             dPadLeft = true;
             dPadRight = false;
         }
-        else if (gamepad1.dpad_left == false && dPadLeft){
+        else if (gamepad2.dpad_left == false && dPadLeft){
             JewelArm.setPower(-1);
             dPadRight = false;
         }
-        else if (gamepad1.dpad_right == false && dPadRight){
+        else if (gamepad2.dpad_right == false && dPadRight){
             JewelArm.setPower(1);
             dPadLeft = false;
         }
-        else if (gamepad1.dpad_right && dPadRight){
+        else if (gamepad2.dpad_right && dPadRight){
             dPadRight = false;
         }
-        else if (gamepad1.dpad_left && dPadLeft){
+        else if (gamepad2.dpad_left && dPadLeft){
             dPadLeft = false;
         }
         else {
             JewelArm.setPower(0);
+        }
+        if (gamepad2.dpad_up){
+            dPadLeft = false;
+            dPadRight = false;
         }
         
         if (gamepad1.x){
