@@ -19,7 +19,7 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by FTC on 9/26/2017.
  */
-@TeleOp
+@TeleOp(name="CURRENTTeleOp", group ="Concept")
 public class NEWNEWTeleOp extends LinearOpMode {
 
     boolean BackClaw;
