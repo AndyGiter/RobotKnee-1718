@@ -19,7 +19,7 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by FTC on 9/26/2017.
  */
-@TeleOp(name="CURRENTTeleOp", group ="Concept")
+@TeleOp
 public class NEWNEWTeleOp extends LinearOpMode {
 
     boolean BackClaw;
@@ -87,7 +87,7 @@ public void runOpMode() {
     waitForStart();
     BackLeftServo.setPosition(0.5);
     BackRightServo.setPosition(0.15);
-    FrontLeftServo.setPosition(0);
+    FrontLeftServo.setPosition(0.35);
     FrontRightServo.setPosition(0);
     XPress = false;
     YPress = false;
@@ -105,6 +105,10 @@ public void runOpMode() {
     telemetry.addData("Direction", BackString);
     telemetry.addData("Back Claw", BackClawString);
     telemetry.addData("Claw", ClawString);
+    telemetry.addData("LeftStickX", gamepad1.left_stick_x);
+    telemetry.addData("LeftStickY", gamepad1.left_stick_y);
+    telemetry.addData("RightStickX", gamepad1.right_stick_x);
+    telemetry.addData("RightStickY", gamepad1.right_stick_y);
     telemetry.update();
     while (opModeIsActive()) {
         
@@ -120,11 +124,6 @@ public void runOpMode() {
                 HalfSpeed = 1;
                 Press = false;
             }
-            telemetry.addData("Speed:", HalfSpeed);
-            telemetry.addData("Direction", BackString);
-            telemetry.addData("Back Claw", BackClawString);
-            telemetry.addData("Claw", ClawString);
-            telemetry.update();
         }
         
         if (gamepad1.y){
@@ -140,14 +139,10 @@ public void runOpMode() {
                 BackString = "Backwards";
             }
             YPress = false;
-            telemetry.addData("Speed:", HalfSpeed);
-            telemetry.addData("Direction", BackString);
-            telemetry.addData("Back Claw", BackClawString);
-            telemetry.addData("Claw", ClawString);
-            telemetry.update();
+
         }
-        
-        if (Math.abs(gamepad1.right_stick_y) >= 0.2 && Math.abs(gamepad1.right_stick_x) <= 0.2 && Math.abs(gamepad1.left_stick_x) <= 0.2){
+        if ((Math.abs(gamepad1.right_stick_y) >= 0.4 || Math.abs(gamepad1.right_stick_x) >= 0.4 || Math.abs(gamepad1.left_stick_x) >= 0.4) && (Math.abs(gamepad2.right_stick_y) <= 0.4 || Math.abs(gamepad2.right_stick_x) <= 0.4 || Math.abs(gamepad2.left_stick_x) <= 0.4)){
+        if (Math.abs(gamepad1.right_stick_y) >= 0.4 && Math.abs(gamepad1.right_stick_x) <= 0.4 && Math.abs(gamepad1.left_stick_x) <= 0.4){
             FrontLeft.setDirection(DcMotor.Direction.FORWARD);
             FrontRight.setDirection(DcMotor.Direction.REVERSE);
             BackLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -158,7 +153,7 @@ public void runOpMode() {
             BackRight.setPower(gamepad1.right_stick_y*HalfSpeed*back);
         }
         
-        else if (Math.abs(gamepad1.right_stick_x) >= 0.2 && Math.abs(gamepad1.right_stick_y) <= 0.2 && Math.abs(gamepad1.left_stick_x) <= 0.2){
+        else if (Math.abs(gamepad1.right_stick_x) >= 0.4 && Math.abs(gamepad1.right_stick_y) <= 0.4 && Math.abs(gamepad1.left_stick_x) <= 0.4){
             FrontLeft.setDirection(DcMotor.Direction.REVERSE);
             FrontRight.setDirection(DcMotor.Direction.REVERSE);
             BackLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -169,7 +164,7 @@ public void runOpMode() {
             BackRight.setPower(gamepad1.right_stick_x*HalfSpeed*back);
         }
         
-        else if (Math.abs(gamepad1.left_stick_x) >= 0.1 && Math.abs(gamepad1.right_stick_x) <= 0.2 && Math.abs(gamepad1.right_stick_y) <= 0.2){
+        else if (Math.abs(gamepad1.left_stick_x) >= 0.4 && Math.abs(gamepad1.right_stick_x) <= 0.4 && Math.abs(gamepad1.right_stick_y) <= 0.4){
             if (back == 1) {
                 FrontRight.setDirection(DcMotor.Direction.REVERSE);
                 FrontLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -190,6 +185,53 @@ public void runOpMode() {
                 BackLeft.setPower(gamepad1.left_stick_x*HalfSpeed);
                 BackRight.setPower(gamepad1.left_stick_x*HalfSpeed);
             }
+        }
+        }
+        else if ((Math.abs(gamepad1.right_stick_y) <= 0.4 || Math.abs(gamepad1.right_stick_x) <= 0.4 || Math.abs(gamepad1.left_stick_x) <= 0.4) && (Math.abs(gamepad2.right_stick_y) >= 0.4 || Math.abs(gamepad2.right_stick_x) >= 0.4 || Math.abs(gamepad2.left_stick_x) >= 0.4)){
+        if (Math.abs(gamepad2.right_stick_y) >= 0.4 && Math.abs(gamepad2.right_stick_x) <= 0.4 && Math.abs(gamepad2.left_stick_x) <= 0.4){
+            FrontLeft.setDirection(DcMotor.Direction.FORWARD);
+            FrontRight.setDirection(DcMotor.Direction.REVERSE);
+            BackLeft.setDirection(DcMotor.Direction.FORWARD);
+            BackRight.setDirection(DcMotor.Direction.REVERSE);
+            FrontLeft.setPower(gamepad2.right_stick_y*HalfSpeed*back);
+            FrontRight.setPower(gamepad2.right_stick_y*HalfSpeed*back);
+            BackLeft.setPower(gamepad2.right_stick_y*HalfSpeed*back);
+            BackRight.setPower(gamepad2.right_stick_y*HalfSpeed*back);
+        }
+        
+        else if (Math.abs(gamepad2.right_stick_x) >= 0.4 && Math.abs(gamepad2.right_stick_y) <= 0.4 && Math.abs(gamepad2.left_stick_x) <= 0.4){
+            FrontLeft.setDirection(DcMotor.Direction.REVERSE);
+            FrontRight.setDirection(DcMotor.Direction.REVERSE);
+            BackLeft.setDirection(DcMotor.Direction.FORWARD);
+            BackRight.setDirection(DcMotor.Direction.FORWARD);
+            FrontLeft.setPower(gamepad2.right_stick_x*HalfSpeed*back);
+            FrontRight.setPower(gamepad2.right_stick_x*HalfSpeed*back);
+            BackLeft.setPower(gamepad2.right_stick_x*HalfSpeed*back);
+            BackRight.setPower(gamepad2.right_stick_x*HalfSpeed*back);
+        }
+        
+        else if (Math.abs(gamepad2.left_stick_x) >= 0.4 && Math.abs(gamepad2.right_stick_x) <= 0.4 && Math.abs(gamepad2.right_stick_y) <= 0.4){
+            if (back == 1) {
+                FrontRight.setDirection(DcMotor.Direction.REVERSE);
+                FrontLeft.setDirection(DcMotor.Direction.REVERSE);
+                BackLeft.setDirection(DcMotor.Direction.REVERSE);
+                BackRight.setDirection(DcMotor.Direction.REVERSE);
+                FrontRight.setPower(gamepad2.left_stick_x*HalfSpeed);
+                FrontLeft.setPower(gamepad2.left_stick_x*HalfSpeed);
+                BackLeft.setPower(gamepad2.left_stick_x*HalfSpeed);
+                BackRight.setPower(gamepad2.left_stick_x*HalfSpeed);
+            }
+            else if (back == -1) {
+                FrontRight.setDirection(DcMotor.Direction.REVERSE);
+                FrontLeft.setDirection(DcMotor.Direction.REVERSE);
+                BackLeft.setDirection(DcMotor.Direction.REVERSE);
+                BackRight.setDirection(DcMotor.Direction.REVERSE);
+                FrontRight.setPower(gamepad2.left_stick_x*HalfSpeed);
+                FrontLeft.setPower(gamepad2.left_stick_x*HalfSpeed);
+                BackLeft.setPower(gamepad2.left_stick_x*HalfSpeed);
+                BackRight.setPower(gamepad2.left_stick_x*HalfSpeed);
+            }
+        }
         }
         else {
             FrontLeft.setPower(0);
@@ -243,30 +285,20 @@ public void runOpMode() {
             BackLeftServo.setPosition(0.5);
             BackRightServo.setPosition(0.15);
             BackClawString = "Open";
-            telemetry.addData("Speed:", HalfSpeed);
-            telemetry.addData("Direction", BackString);
-            telemetry.addData("Back Claw", BackClawString);
-            telemetry.addData("Claw", ClawString);
-            telemetry.update();
         }
             
         else if (gamepad1.dpad_left) {
-            BackLeftServo.setPosition(.65);
+            BackLeftServo.setPosition(.85);
             BackRightServo.setPosition(0);
             BackClawString = "Closed";
-            telemetry.addData("Speed:", HalfSpeed);
-            telemetry.addData("Direction", BackString);
-            telemetry.addData("Back Claw", BackClawString);
-            telemetry.addData("Claw", ClawString);
-            telemetry.update();
         }
         
         if (gamepad1.right_trigger >= 0.2){
             FrontLeftServo.setPosition(1);
-            FrontRightServo.setPosition(1);
+            FrontRightServo.setPosition(0.5);
         }
         else {
-            FrontLeftServo.setPosition(0);
+            FrontLeftServo.setPosition(0.35);
             FrontRightServo.setPosition(0);
         }
         
@@ -327,8 +359,15 @@ public void runOpMode() {
         else {
             ClawServo.setPower(0.155);
         }
+        telemetry.addData("Speed:", HalfSpeed);
+        telemetry.addData("Direction", BackString);
+        telemetry.addData("Back Claw", BackClawString);
+        telemetry.addData("Claw", ClawString);
+        telemetry.addData("LeftStickX", gamepad1.left_stick_x);
+        telemetry.addData("LeftStickY", gamepad1.left_stick_y);
+        telemetry.addData("RightStickX", gamepad1.right_stick_x);
+        telemetry.addData("RightStickY", gamepad1.right_stick_y);
+        telemetry.update();
         }
     }
 }
-
-
